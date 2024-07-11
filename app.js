@@ -17,7 +17,11 @@ webpush.setVapidDetails(
     apiKeys.privateKey
 )
 
-// app.use(cors());
+app.use(cors({
+    origin: '*', // Allow all origins
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE', // Allow specific methods
+    allowedHeaders: ['Content-Type', 'Authorization'], // Allow specific headers
+}));
 app.use(express.json());
 
 app.get("/", (req, res) => {
