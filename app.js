@@ -30,9 +30,12 @@ app.post("/save", async (req, res) => {
     res.json({status:'Failed'});
 })
 
-app.post("/send", (req, res) => {
-    // webpush.sendNotification(subDatabse[0], "Hello world");
+app.post("/send",(req, res) => {
+
     console.log(req.body);
+    // req.body.forEach(async (data)=>{
+    //     await sendMessage(data);
+    // })
     res.json({ "statue": "Success", "message": "Message sent to push service" });
 })
 
@@ -50,5 +53,14 @@ const saveToken = (data)=>{
         }catch(e){
             resolve({valid:false});
         }
+    })
+}
+
+const sendMessage = (data)=>{
+    return new Promise(async (resolve,reject)=>{
+        console.log(data);
+        const response = await webpush.sendNotification(data.subscription, JSON.stringify(data.notification));
+        console.log(response);
+        resolve(true);  
     })
 }
