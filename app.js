@@ -27,6 +27,7 @@ const subDatabse = [];
 
 
 app.post("/save-subscription", (req, res) => {
+    console.log(req.body);
     subDatabse.push(req.body);
     res.json({ status: "Success", message: "Subscription saved!" })
 })
