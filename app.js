@@ -1,3 +1,4 @@
+const axios = require('axios');
 const express = require("express");
 const app = express();
 const webpush = require('web-push');
@@ -23,20 +24,31 @@ app.get("/", (req, res) => {
     res.send("Hello world");
 })
 
-const subDatabse = [];
-
-
-app.post("/save-subscription", (req, res) => {
-    console.log(req.body);
-    subDatabse.push(req.body);
-    res.json({ status: "Success", message: "Subscription saved!" })
+app.post("/save", async (req, res) => {
+    if(await saveToken(req.body).valid);
+        return res.json({ status: "Success", message: "Subscription saved!" })
+    res.json({status:'Failed'});
 })
 
-app.get("/send-notification", (req, res) => {
-    webpush.sendNotification(subDatabse[0], "Hello world");
+app.post("/send", (req, res) => {
+    // webpush.sendNotification(subDatabse[0], "Hello world");
+    console.log(req.body);
     res.json({ "statue": "Success", "message": "Message sent to push service" });
 })
 
 app.listen(port, () => {
     console.log("Server running on port 3000!");
 })
+
+
+const saveToken = (data)=>{
+    return new Promise(async(resolve,reject)=>{
+        try{
+            const response = await axios.post('https://wispay.biz.id/library/ajax/savesubs.php', data)
+            console.log(response);
+            resolve({valid:true});
+        }catch(e){
+            resolve({valid:false});
+        }
+    })
+}
