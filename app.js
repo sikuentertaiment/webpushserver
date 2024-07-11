@@ -59,6 +59,7 @@ const sendMessage = (data)=>{
         if(!data.subscription || data.subscription === '')
             return resolve(true);
         const response = await webpush.sendNotification(data.subscription, JSON.stringify(data.notification));
+        console.log(response);
         resolve(true);  
     })
 }
