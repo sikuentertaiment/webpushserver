@@ -31,12 +31,10 @@ app.post("/save", async (req, res) => {
 })
 
 app.post("/send",(req, res) => {
-
-    console.log(req.body);
-    // req.body.forEach(async (data)=>{
-    //     await sendMessage(data);
-    // })
-    res.json({ "statue": "Success", "message": "Message sent to push service" });
+    req.body.forEach(async (data)=>{
+        await sendMessage(data);
+    })
+    res.json({ "status": "Success", "message": "Message sent to push service" });
 })
 
 app.listen(port, () => {
@@ -58,9 +56,9 @@ const saveToken = (data)=>{
 
 const sendMessage = (data)=>{
     return new Promise(async (resolve,reject)=>{
-        console.log(data);
+        if(!data.subscription || data.subscription === '')
+            return resolve(true);
         const response = await webpush.sendNotification(data.subscription, JSON.stringify(data.notification));
-        console.log(response);
         resolve(true);  
     })
 }
