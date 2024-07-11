@@ -17,11 +17,19 @@ webpush.setVapidDetails(
     apiKeys.privateKey
 )
 
-app.use(cors({
-    origin: '*', // Allow all origins
-    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE', // Allow specific methods
-    allowedHeaders: ['Content-Type', 'Authorization'], // Allow specific headers
-}));
+app.use((req, res, next) => {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Methods', 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS');
+    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+    
+    // Handle preflight requests
+    if (req.method === 'OPTIONS') {
+        res.sendStatus(204);
+    } else {
+        next();
+    }
+});
+
 app.use(express.json());
 
 app.get("/", (req, res) => {
